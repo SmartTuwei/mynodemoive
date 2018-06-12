@@ -3,6 +3,7 @@ var app = express()
 var path = require('path')
 var mongoose = require('mongoose')
 var Movie = require("./models/movie.js")
+var User = require("./models/user.js")
 var port = process.env.PORT || 3000
 var _ = require("underscore")
 mongoose.connect('mongodb://127.0.0.1:27017/imooc')
@@ -14,21 +15,21 @@ app.set('view engine','jade')   //模板引擎
 app.use(express.static(path.join(__dirname,'public')))  //静态文件的路径
 app.locals.moment=require('moment')
 app.listen(port)
-
+require('./app/config/routes')(app)
 console.log("server running at 3000")
 
 // 首页
-app.get('/',function(req,res){
-    Movie.fetch(function(err,movies){
-        if(err){
-            console.log(err)
-         }
-        res.render('index',{
-          title:'欢迎进入首页0',
-          movies:movies
-        })
-    })
-})
+// app.get('/',function(req,res){
+//     Movie.fetch(function(err,movies){
+//         if(err){
+//             console.log(err)
+//          }
+//         res.render('index',{
+//           title:'欢迎进入首页0',
+//           movies:movies
+//         })
+//     })
+// })
 // 详情播放页
 app.get('/movie/:id',function(req,res){
      var id=req.params.id  //url中的id
@@ -51,6 +52,33 @@ app.get('/admin/update/:id',function(req,res){
       })
    }
 })
+
+//注册
+app.post("/user/signup",function(req,res){
+     var _user = req.body.user
+     console.log(_user);
+        User.findOne({name: _user.name},  function(err, user) {
+            if (err) {
+                console.log(err)
+            }
+            if (user){
+                console.log("重复的用户名!!!")
+                return res.redirect('/signin');
+            }else {
+            user = new User(_user); 
+            user.save(function(err, user){
+                if (err) {
+                console.log(err)
+                }
+                console.log("保存成功了!!! 恭喜你")
+                res.redirect('/')
+            })
+            }
+        })
+})
+
+
+
 //admin post method
 app.post('/admin/movie/new',function(req,res){
     var id = req.body.movie._id

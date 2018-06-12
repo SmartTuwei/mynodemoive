@@ -3,6 +3,11 @@ script(src="//vjs.zencdn.net/5.19/video.min.js")
 extend ../layout
 
 block content
+ 
+script(type='text/javascript')
+  if(msg) 
+    alert(msg)   
+  else
   .container
     .row
       each item in movies
