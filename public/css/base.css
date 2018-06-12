@@ -12,6 +12,10 @@
     font-weight: bold;
     fonnt-size:16px;
 }
+.mt25{
+    margin-top: 25px;
+    float: left;
+}
 .fl{
     float: left;
 }

@@ -18,18 +18,8 @@ app.listen(port)
 require('./app/config/routes')(app)
 console.log("server running at 3000")
 
-// 首页
-// app.get('/',function(req,res){
-//     Movie.fetch(function(err,movies){
-//         if(err){
-//             console.log(err)
-//          }
-//         res.render('index',{
-//           title:'欢迎进入首页0',
-//           movies:movies
-//         })
-//     })
-// })
+
+
 // 详情播放页
 app.get('/movie/:id',function(req,res){
      var id=req.params.id  //url中的id
@@ -54,28 +44,28 @@ app.get('/admin/update/:id',function(req,res){
 })
 
 //注册
-app.post("/user/signup",function(req,res){
-     var _user = req.body.user
-     console.log(_user);
-        User.findOne({name: _user.name},  function(err, user) {
-            if (err) {
-                console.log(err)
-            }
-            if (user){
-                console.log("重复的用户名!!!")
-                return res.redirect('/signin');
-            }else {
-            user = new User(_user); 
-            user.save(function(err, user){
-                if (err) {
-                console.log(err)
-                }
-                console.log("保存成功了!!! 恭喜你")
-                res.redirect('/')
-            })
-            }
-        })
-})
+// app.post("/user/signup",function(req,res){
+//      var _user = req.body.user
+//      console.log(_user);
+//         User.findOne({name: _user.name},  function(err, user) {
+//             if (err) {
+//                 console.log(err)
+//             }
+//             if (user){
+//                 console.log("重复的用户名!!!")
+//                 return res.redirect('/signin');
+//             }else {
+//             user = new User(_user); 
+//             user.save(function(err, user){
+//                 if (err) {
+//                 console.log(err)
+//                 }
+//                 console.log("保存成功了!!! 恭喜你")
+//                 res.redirect('/')
+//             })
+//             }
+//         })
+// })
 
 
 
@@ -119,21 +109,7 @@ app.post('/admin/movie/new',function(req,res){
             })
     }
 })
-app.get('/admin/movie',function(req,res){
-     res.render('admin',{
-        title:'imooc 后台管理页',
-        movie:{
-           title:"",
-           doctor:"",
-           country:"",
-           year:"",
-           poster:"",
-           flash:"",
-           summary:"",
-           language:""
-        }
-    })
-})
+ 
 // 列表页
 app.get('/admin/list',function(req,res){
       Movie.fetch(function(err,movies){

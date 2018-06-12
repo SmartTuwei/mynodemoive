@@ -5,11 +5,22 @@ var Movie = mongoose.model('Movie')
 // index page
 
 exports.index = function(req, res) {
+   Movie.fetch(function(err,movies){
+            if(err){
+                console.log(err)
+             }
+             console.log("movies "+movies);
+            res.render('index',{
+                title:'欢迎进入首页',
+                movies:movies
+            })
+        })
 
-      res.render('index', {
-        title: 'imooc 首页11',
-        movies: 'categories'
-      })
+
+      // res.render('index', {
+      //   title: 'imooc 首页11',
+      //   movies: 'categories'
+      // })
       
 }
 

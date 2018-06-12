@@ -1,6 +1,6 @@
 var Index = require('../controllers/index')
 var User = require('../controllers/user')
-// var Movie = require('../controllers/movie')
+var Movie = require('../controllers/admin')
 // var Comment = require('../app/controllers/comment')
 // var Category = require('../app/controllers/category')
 
@@ -14,10 +14,19 @@ module.exports = function(app) {
 
   //   next()
   // })
+// 后台录入页
+
+  app.get('/admin/addmovie', Movie.addmovies)
+
 
   // Index
   app.get('/', Index.index)
   app.post("/user/signup",User.signup);
+
+  //登录用户
+
+  app.post('/login',User.login)
+
 
   // User
   // app.post('/user/signup', User.signup)
