@@ -24,7 +24,7 @@ app.get('/',function(req,res){
             console.log(err)
          }
         res.render('index',{
-          title:'欢迎进入首页',
+          title:'欢迎进入首页0',
           movies:movies
         })
     })
