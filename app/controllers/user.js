@@ -18,6 +18,7 @@ exports.signup = function(req,res){
               if (err) {
                 console.log(err)
               }
+               
               console.log("保存成功了!!! 恭喜你")
             //res.end(JSON.stringify(user));
               res.render("response",{
@@ -28,13 +29,11 @@ exports.signup = function(req,res){
         }
    })
 }
-
+// 登录路由
 exports.login = function(req,res){
     var _user = req.body.user
     var name = _user.name
     var password = _user.password
-    // console.log(password);
-    // console.log("用户登录！" )
     User.findOne({name: name}, function(err, user) {
         if (err) {
              console.log(err)
@@ -46,6 +45,7 @@ exports.login = function(req,res){
         } else{
                 console.log(user);
                 if( password == user.password){
+                    // req.session.user = name;
                     return res.render('response',{
                         "message":"登录成功！"
                     })   

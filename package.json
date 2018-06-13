@@ -5,14 +5,19 @@
   "main": "app.js",
   "dependencies": {
     "bluebird": "^3.5.0",
-    "body-parser": "^1.17.1",
+    "body-parser": "^1.18.3",
+    "connect-multiparty": "^2.1.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
+    "express-session": "^1.15.6",
     "jade": "^1.11.0",
     "moment": "^2.18.1",
     "mongoose": "^4.9.7",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "connect-mongo": "^2.0.1",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "grunt": "^1.0.3",
     "grunt-concurrent": "^2.3.1",

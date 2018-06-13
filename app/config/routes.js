@@ -1,9 +1,10 @@
 var Index = require('../controllers/index')
 var User = require('../controllers/user')
 var Movie = require('../controllers/admin')
+var multipart = require("connect-multiparty")
 // var Comment = require('../app/controllers/comment')
 // var Category = require('../app/controllers/category')
-
+var Mdetail = require("../controllers/detail")
 module.exports = function(app) {
 
   // // pre handle user
@@ -26,6 +27,10 @@ module.exports = function(app) {
   //登录用户
 
   app.post('/login',User.login)
+
+  // 电影是详情页
+  app.get('/movie/:id',Mdetail.Mdetail)
+
 
 
   // User
