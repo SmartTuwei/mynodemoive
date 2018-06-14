@@ -62,7 +62,6 @@ module.exports = function(grunt) {
         }
       }
     },
-
     nodemon: {
       dev: {
         options: {
@@ -91,7 +90,7 @@ module.exports = function(grunt) {
     concurrent: {
       tasks: ['nodemon', 'watch', 'less', 'uglify', 'jshint'],
       options: {
-        logConcurrentOutput: true
+          logConcurrentOutput: true
       }
     }
   })

@@ -17,10 +17,9 @@ exports.signup = function(req,res){
           user.save(function(err, user){
               if (err) {
                 console.log(err)
-              }
-               
+              } 
+            //   req.sessions.user = _user             
               console.log("保存成功了!!! 恭喜你")
-            //res.end(JSON.stringify(user));
               res.render("response",{
                   flag:"true",
                   message:"注册成功！！！"
@@ -45,7 +44,7 @@ exports.login = function(req,res){
         } else{
                 console.log(user);
                 if( password == user.password){
-                    // req.session.user = name;
+                    req.session.user = user;
                     return res.render('response',{
                         "message":"登录成功！"
                     })   
@@ -56,4 +55,10 @@ exports.login = function(req,res){
                 }
              }
     })
+}
+// 退出路由
+exports.logout = function(req,res){
+    delete req.session.user;
+    // delete app.local.user;
+    res.redirect("/")
 }

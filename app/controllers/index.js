@@ -5,12 +5,16 @@ var Movie = mongoose.model('Movie')
 // index page
 
 exports.index = function(req, res) {
-  //  console.log("user=====",req.session.user);
+  console.log("进入首页！！")
+  console.log(req.session.user)
+  // if(req.session.user){
+  //      app.local.user =  req.session.user;
+  // }
    Movie.fetch(function(err,movies){
             if(err){
                 console.log(err)
              }
-             console.log("movies "+movies);
+            //  console.log("movies "+movies);
             res.render('index',{
                 title:'欢迎进入首页',
                 movies:movies

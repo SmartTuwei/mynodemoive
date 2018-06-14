@@ -1,37 +1,34 @@
+var User = require("../../models/user.js")
+var Movie = require("../../models/movie.js")
 var Index = require('../controllers/index')
-var User = require('../controllers/user')
-var Movie = require('../controllers/admin')
+var UserCtr = require('../controllers/user')
+var MovieCtr = require('../controllers/admin')
 var multipart = require("connect-multiparty")
 // var Comment = require('../app/controllers/comment')
 // var Category = require('../app/controllers/category')
 var Mdetail = require("../controllers/detail")
 module.exports = function(app) {
-
-  // // pre handle user
-  // app.use(function(req, res, next) {
-  //   var _user = req.session.user
-
-  //   app.locals.user = _user
-
-  //   next()
-  // })
-// 后台录入页
-
-  app.get('/admin/addmovie', Movie.addmovies)
-
+  app.use(function(req, res, next) {
+    var _user = req.session.user;
+    app.locals.user = _user
+      next()
+  })
 
   // Index
   app.get('/', Index.index)
-  app.post("/user/signup",User.signup);
+  app.post("/user/signup",UserCtr.signup);
 
   //登录用户
 
-  app.post('/login',User.login)
+  app.post('/login',UserCtr.login)
 
   // 电影是详情页
   app.get('/movie/:id',Mdetail.Mdetail)
+  // 后台录入页
+  app.get('/admin/addmovie', MovieCtr.addmovies)
 
-
+ // 退出登录
+  app.get('/logout',UserCtr.logout)
 
   // User
   // app.post('/user/signup', User.signup)
@@ -59,4 +56,84 @@ module.exports = function(app) {
 
   // // results
   // app.get('/results', Index.search)
+
+  app.get('/admin/update/:id',function(req,res){
+    var id = req.params.id
+    if(id){
+       Movie.findById(id,function(err,movie){
+         res.render('admin',{
+             title:'后台更新页',
+             movie:movie
+         })
+       })
+    }
+ })
+ 
+ //admin post method
+ app.post('/admin/movie/new',function(req,res){
+     var id = req.body.movie._id
+     var movieObj = req.body.movie
+     console.log("ha")
+     var _movie =null
+     if(id !== 'undefined'){
+         Movie.findById(id,function(err,movie){
+             if(err){
+                 console.log(err)
+             }
+             _movie=_.extend(movie,movieObj)
+             _movie.save(function(err,movie){
+                 if (err) {
+                     console.log(err)
+                 }
+ 
+                 res.redirect('/movie/'+movie._id)
+             })            
+         })
+  }else{
+         _movie = new Movie({
+               doctor:movieObj.doctor,
+               title:movieObj.title,
+               country:movieObj.country, 
+               language:movieObj.language,
+               year:movieObj.year,
+               poster:movieObj.poster, 
+               summary:movieObj.summary,
+               flash:movieObj.flash      
+         })
+         _movie.save(function(err,movie){
+                 if (err) {
+                     console.log(err)
+                 }
+ 
+                 res.redirect('/movie/'+movie._id)
+             })
+     }
+ })
+  
+ // 列表页
+ app.get('/admin/list',function(req,res){
+       Movie.fetch(function(err,movies){
+         if(err){
+             console.log(err)
+          }
+         res.render('list',{
+           title:'首页',
+           movies:movies
+         })
+ 
+     })
+ })
+ // list delete movie data 列表页删除电影
+ app.delete('/admin/list', function (req, res) {
+     var id = req.query.id;
+     if (id) {
+         Movie.remove({_id: id}, function (err, movie) {
+             if (err) {
+                 console.log(err);
+             } else {
+                 res.json({success: 1});
+             }
+         });
+     }
+ });
 }
