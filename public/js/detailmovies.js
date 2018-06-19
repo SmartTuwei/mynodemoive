@@ -12,9 +12,11 @@ $(function () {
         bindEvents: function() {
             var playBtn = $(".js-playbtn"),
                 pauseBtn = $(".js-pausebtn"),
-                screenbtn = $(".js-screenbtn");
+                screenbtn = $(".js-screenbtn"),
+                loop=$(".js-loop"),
                 volumeRange = $(".js-volume"),
                 prcessRange = $(".js-process");
+            loop.on("click",$.proxy(this.handleCanplayloop,this));
             playBtn.on("click", $.proxy(this.handlePlayBtnClick, this));
             pauseBtn.on("click", $.proxy(this.handlePauseBtnClick, this));
             volumeRange.on("change", $.proxy(this.handleVolumeChange, this));
@@ -23,9 +25,33 @@ $(function () {
             $(this.video).on("timeupdate", $.proxy(this.handleVideoTimeUpdated, this));
             $(this.video).on("canplay", $.proxy(this.handleCanplayTriggerd, this))
         },
-
+        handleCanplayloop:function(){
+          
+            if(this.video.muted){
+                this.video.muted = false;
+            }else{
+                this.video.muted = true;
+            }
+        },
         handleCanplayTriggerd: function(){
-            $(".js-videospan").text(parseInt(this.video.duration));
+            var couts = this.video.duration;
+            var c = 0; 
+            if(couts > -1){
+                var hour = Math.floor(couts/3600);
+                var min = Math.floor(couts/60) % 60;
+                var sec = couts % 60;                 
+                if(hour < 10) {
+                    c = '0'+ hour + ":";
+                } else {
+                    c = hour + ":";
+                }
+    
+                if(min < 10){c += "0";}
+                c += min + ":";
+                if(sec < 10){c += "0";}
+                c += sec.toFixed(0);
+            } 
+            $(".js-videospan").text("0/"+c);
         },
 
         handlePlayBtnClick: function() {
@@ -41,9 +67,25 @@ $(function () {
         },
 
         handleVideoTimeUpdated: function(e){
-            var ratio = this.video.currentTime / this.video.duration;
-            $(".js-currentspan").text(  parseInt(this.video.currentTime)+"/");
-            $(".js-process").val(ratio);
+            // var ratio = this.video.currentTime / this.video.duration;
+            var s = this.video.currentTime;           
+            if(s > -1){
+                var hour = Math.floor(s/3600);
+                var min = Math.floor(s/60) % 60;
+                var sec = s % 60;
+                if(hour < 10) {
+                    t = '0'+ hour + ":";
+                } else {
+                    t = hour + ":";
+                }
+    
+                if(min < 10){t += "0";}
+                t += min + ":";
+                if(sec < 10){t += "0";}
+                t += sec.toFixed(0);
+            }           
+            $(".js-currentspan").text( t + "/");
+            // $(".js-process").val(c);
         },
 
         handleVolumeChange: function(e) {

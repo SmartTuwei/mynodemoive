@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
 var User = mongoose.model('User');
 
 exports.signup = function(req,res){
-    var _user = req.body.user
+      var _user = req.body.user
       User.findOne({name: _user.name},  function(err, user) {
           if (err) {
               console.log(err)
@@ -45,7 +45,7 @@ exports.login = function(req,res){
         } else{
                 console.log(user);
                 if( password == user.password){
-                    // req.session.user = name;
+                    req.session.user = _user;
                     return res.render('response',{
                         "message":"登录成功！"
                     })   
@@ -56,4 +56,10 @@ exports.login = function(req,res){
                 }
              }
     })
+}
+//退出登录
+exports.logout = function(req,res){
+    delete req.session.user
+    delete app.locals.user
+    res.redirect("/")
 }

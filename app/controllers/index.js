@@ -5,7 +5,8 @@ var Movie = mongoose.model('Movie')
 // index page
 
 exports.index = function(req, res) {
-  //  console.log("user=====",req.session.user);
+  var _user = req.session.user
+  console.log("======================================="+_user)
    Movie.fetch(function(err,movies){
             if(err){
                 console.log(err)
@@ -16,8 +17,6 @@ exports.index = function(req, res) {
                 movies:movies
             })
         })
-
-
       // res.render('index', {
       //   title: 'imooc 首页11',
       //   movies: 'categories'
