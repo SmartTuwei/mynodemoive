@@ -8,7 +8,7 @@ $('.del').click(function (e) {
             var tr = $('.item-id-' + id);
             $.ajax({
                 type: 'DELETE', // 异步请求类型：删除
-                url: '/admin/list?id=' + id,
+                url: '/admin/deletelist?id=' + id,
             })
             .done(function (results) {
                 if (results.success === 1) {

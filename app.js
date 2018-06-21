@@ -20,6 +20,7 @@ app.use(express.static(path.join(__dirname,'public')))  //静态文件的路径
 
 app.locals.moment=require('moment')
 // 这一步将express 和 mongod联系起来将 session 保存在数据库中
+process.app = app;
 app.use(session({
     secret:"movice",
     store:new mongoStore({

@@ -2,6 +2,10 @@ var mongoose = require('mongoose');
 var UserSchema = new mongoose.Schema({
     name: String,
     password:String,
+    role:{
+        type:Number,
+        default:0
+    },
     meta:{
         createAt:{
            type:String,
