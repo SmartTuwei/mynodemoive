@@ -5,6 +5,7 @@ var mongoose = require('mongoose')
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser') 
 var session = require("express-session")
+var looger = require("morgan")
 var mongoStore =require("connect-mongo")(session)
 var port = process.env.PORT || 3000
 var _ = require("underscore")
@@ -18,18 +19,24 @@ app.set('view engine','jade')   //模板引擎
 app.use(express.static(path.join(__dirname,'public')))  //静态文件的路径
 
 app.locals.moment=require('moment')
-
+// 这一步将express 和 mongod联系起来将 session 保存在数据库中
+process.app = app;
 app.use(session({
-    secret:"movice",
+    secret:"movice",      
     store:new mongoStore({
         url:mongoUrl,
-        collection :"sessions"
+        collection:"sessions"
     })
 }))
+
+if("development" === app.get("env")){
+    app.set("showStackError",true)
+    app.use(looger(":method :url :status"))
+    app.locals.pretty = true
+    mongoose.set("debug",true)
+}
 
 app.listen(port)
 require('./app/config/routes')(app)
 console.log("server running at 3000")
-
-
-//admin update movie
+ 

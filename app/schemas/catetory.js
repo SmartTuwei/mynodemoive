@@ -1,36 +1,35 @@
+ 
 var mongoose = require('mongoose');
-var UserSchema = new mongoose.Schema({
+var Schema = mongoose.Schema
+var ObjectId = Schema.Types.ObjectId
+ 
+var CatetorySchema = new mongoose.Schema({
     name: String,
-    password:String,
-    role:{
-        type:Number,
-        default:0
-    },
-    meta:{
-        createAt:{
-           type:String,
-            default:new Date()
+    movies:[{type:ObjectId,ref:"Movie"}],
+    meta: {
+        createAt: {
+            type: Date,
+            default: Date.now()
         },
-        updateAt:{
-            type:String,
-             default:new Date()
-         }
+        updateAt: {
+            type: Date,
+            default: Date.now()
+        }
     }
 });
 
-
-UserSchema.pre('save', function(next) {
-    var user =this;
+CatetorySchema.pre('save', function(next) {
     if (this.isNew) {
         this.meta.createAt = this.meta.updateAt = Date.now();
     }
     else {
         this.meta.updateAt = Date.now();
     }
+
     next();
 });
 
-UserSchema.statics = {
+CatetorySchema.statics = {
     fetch: function(cb) {
         return this
             .find({})
@@ -44,4 +43,4 @@ UserSchema.statics = {
     }
 };
 
-module.exports = UserSchema;
+module.exports = CatetorySchema;

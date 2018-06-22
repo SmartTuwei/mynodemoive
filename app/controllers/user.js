@@ -1,8 +1,7 @@
 var mongoose = require('mongoose')
 var User = mongoose.model('User');
-
 exports.signup = function(req,res){
-    var _user = req.body.user
+      var _user = req.body.user
       User.findOne({name: _user.name},  function(err, user) {
           if (err) {
               console.log(err)
@@ -42,23 +41,44 @@ exports.login = function(req,res){
                 "message":"用户名不存在"
             }) 
         } else{
-                console.log(user);
-                if( password == user.password){
-                    req.session.user = user;
-                    return res.render('response',{
-                        "message":"登录成功！"
-                    })   
-                }else{
-                    return res.render('response',{
-                        "message":"密码错误"
-                    }) 
-                }
-             }
+            if( password == user.password){
+                req.session.user = user;
+                return res.render('response',{
+                    "message":"登录成功！"
+                })   
+            }else{
+                return res.render('response',{
+                    "message":"密码错误"
+                }) 
+            }
+        }
     })
 }
-// 退出路由
+//退出登录
 exports.logout = function(req,res){
-    delete req.session.user;
-    // delete app.local.user;
+    delete req.session.user
+    var app = process.app;
+    delete app.locals.user
     res.redirect("/")
 }
+// midware for user 
+exports.loginRequired =function (req,res,next){
+      var user = req.session.user
+      console.log("midware for user" + user)
+      if(!user){
+          return res.render("response",{
+            "message":"请先登录用户!" 
+          })
+      }   
+     next()
+} 
+exports.adminRequired =function (req,res,next){
+    var user = req.session.user
+    console.log(user.role);
+    if(user.role == undefined || user.role <= 10){
+        return res.render("response",{
+            "message":"用户权限不足,请联系管理员!"
+        })
+    }
+    next()
+} 
