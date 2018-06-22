@@ -3,7 +3,6 @@ var Comment = require("../../models/comment")
 // var Category = mongoose.model('Category')
 // index page
 exports.save = function(req,res){ 
-    console.log("进入平")
     var _comment = req.body.comment
     var movieId= _comment.movie
     console.log(_comment.cid);
@@ -28,7 +27,6 @@ exports.save = function(req,res){
             if(err){
                 console.log(err)
             }
-            console.log("日你妈")
             res.redirect("/movie/"+movieId)
         })
     }

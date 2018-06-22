@@ -22,7 +22,7 @@ app.locals.moment=require('moment')
 // 这一步将express 和 mongod联系起来将 session 保存在数据库中
 process.app = app;
 app.use(session({
-    secret:"movice",
+    secret:"movice",      
     store:new mongoStore({
         url:mongoUrl,
         collection:"sessions"
@@ -35,7 +35,6 @@ if("development" === app.get("env")){
     app.locals.pretty = true
     mongoose.set("debug",true)
 }
-
 
 app.listen(port)
 require('./app/config/routes')(app)

@@ -1,20 +1,29 @@
 var mongoose = require('mongoose')
 var Movie = mongoose.model('Movie')
-// var Category = mongoose.model('Category')
+
+var Catetory = mongoose.model('Catetory')
 
 // index page
 
 exports.index = function(req, res) {
-   var _user = req.session.user
-   Movie.fetch(function(err,movies){
-            if(err){
-                console.log(err)
-             }
-            res.render('index',{
-                title:'欢迎进入首页',
-                movies:movies
-            })
+  Catetory
+        .find({})
+        .populate({
+          path: 'movies',
+          select: 'title poster',
+          options: { limit: 6 }
         })
+        .exec(function(err, categories) {
+          if (err) {
+            console.log(err)
+          }
+          console.log(categories)
+      res.render('index', {
+        title: '首页',
+        categories: categories
+      })
+    })
+ console.log("indexindex")
 }
 
 // search page
@@ -26,7 +35,7 @@ exports.search = function(req, res) {
   var index = page * count
 
   if (catId) {
-    Category
+    Catetory
       .find({_id: catId})
       .populate({
         path: 'movies',
@@ -36,12 +45,12 @@ exports.search = function(req, res) {
         if (err) {
           console.log(err)
         }
-        var category = categories[0] || {}
-        var movies = category.movies || []
+        var catetory = categories[0] || {}
+        var movies = catetory.movies || []
         var results = movies.slice(index, index + count)
         res.render('results', {
           title: 'imooc 结果列表页面',
-          keyword: category.name,
+          keyword: catetory.name,
           currentPage: (page + 1),
           query: 'cat=' + catId,
           totalPage: Math.ceil(movies.length / count),

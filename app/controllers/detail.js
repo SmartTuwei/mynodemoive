@@ -3,6 +3,7 @@ var Movie = mongoose.model('Movie')
 var Comment = mongoose.model('Comment')
 
 exports.Mdetail = function(req,res){
+        console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
     var id=req.params.id  //url中的id
     Movie.findById(id,function(err,movie){
         if(err){
