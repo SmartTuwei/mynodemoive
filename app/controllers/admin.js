@@ -6,19 +6,41 @@ var fs = require('fs')
 var path = require('path')
 
 // index page
+// 录入电影路由
 exports.addmovies = function(req,res){
   Category.find({},function(err,categories){
         if(err){
             console.log(err)
         }
         res.render('admin',{
-            title:'imooc 后台管理页',
+            title:'后台管理页',
             categories:categories,
             movie:{}
         })
   }) 
   
 }
+// 存储海报 midware
+exports.savePoster =function(req,res,next){
+    var posterData = req.files.uploadPoster
+    var filePath = posterData.path
+    var originalFilename = posterData.originalFilename
+    if(originalFilename){
+          fs.readFile(filePath,function(err,data){
+                var timestamp = Date.now()
+                var type = posterData.type.split("/")[1]
+                var poster = timestamp + "." + type
+                var newPath = path.join(__dirname,"../../public/upload/" + poster)
+                fs.writeFile(newPath,data,function(err){
+                    req.poster = poster
+                    next()
+                })
+          })
+    }else{
+         next()
+    }
+}
+// 录入电影提交后台
 exports.newmovies = function(req,res){
       var id = req.body.movie._id
       var movieObj = req.body.movie
@@ -73,20 +95,21 @@ exports.newmovies = function(req,res){
      }
 }
 exports.moviesList = function(req,res){
-        Movie.fetch(function(err,movies){
-        if(err){
-            console.log(err)
-            }
-        res.render('list',{
-            title:'首页',
-            movies:movies
-        })
+        Movie.find({})
+        .populate({ path: 'category', select: { name: 1 } }) 
+        .exec(function(err,movies){
+          if(err){
+              console.log(err)
+           }
+          res.render('list',{
+              title:'列表页面',
+              movies:movies
+          })
 
     })
 }
 exports.deleteList = function (req, res) {
         var id = req.query.id;
-        console.log("删除电影测试!!!")
         if (id) {
             Movie.remove({_id: id}, function (err, movie) {
                 if (err) {
@@ -97,24 +120,14 @@ exports.deleteList = function (req, res) {
             });
         }
 }
-exports.catetory_admin = function(req,res){
-  Category.fetch(function(err, categories) {
-    if (err) {
-      console.log(err)
-    }
-    res.render('categorylist', {
-          title: '分类列表页',
-          categories: categories
-    })
-  })
-}
+ 
 //更新电影
 exports.update = function(req,res){
         var id = req.params.id
         if(id){
             Movie.findById(id, function(err, movie) {
-              console.log(movie)
                 Category.find({}, function(err, categories) {
+                  console.log(categories);
                     res.render('admin', {
                     title: '后台更新页',
                     movie: movie,

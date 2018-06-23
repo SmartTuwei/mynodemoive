@@ -30,12 +30,12 @@ app.get("/movie/:id", Mdetail.Mdetail);
 app.get("/admin/addmovie",Userctr.loginRequired,Userctr.adminRequired,Admin.addmovies);
 // 更新电影
 app.get('/admin/movie/update/:id',Userctr.loginRequired,Userctr.adminRequired, Admin.update) 
-//admin post method
-app.post('/admin/movie',Userctr.loginRequired,Userctr.adminRequired, Admin.newmovies)      
+// admin post method 保存电影的post提交路由
+app.post('/admin/movie',Userctr.loginRequired,Userctr.adminRequired,Admin.savePoster, Admin.newmovies)      
 // 列表页
 app.get('/admin/movie/list',Userctr.loginRequired,Userctr.adminRequired, Admin.moviesList)
-// 
-app.get('/admin/movie/catetory_admin',Userctr.loginRequired,Userctr.adminRequired, Admin.catetory_admin)
+ 
+ 
 
 //列表页删除电影
 app.post('/user/comment',Userctr.loginRequired,Comment.save)  
@@ -50,7 +50,11 @@ app.post('/user/comment',Userctr.loginRequired,Comment.save)
 app.get("/admin/catetory/new",Userctr.loginRequired,Userctr.adminRequired,Catetory.new)
 app.post('/admin/category', Userctr.loginRequired, Userctr.adminRequired, Catetory.save)
 app.get('/admin/category/list', Userctr.loginRequired, Userctr.adminRequired, Catetory.list)
-
 app.get("/results",Index.search)
+
+// 添加分类
+app.get('/admin/movie/catetory_admin',Userctr.loginRequired,Userctr.adminRequired, Catetory.catetory_admin)
+// 更新分类
+app.get("/admin/category/update/:id",Userctr.loginRequired,Userctr.adminRequired,Catetory.catetory_update)
 
 };

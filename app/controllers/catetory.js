@@ -33,3 +33,27 @@ var Category = require("../../models/catetory")
       })
     })
   }
+// 添加分类
+exports.catetory_admin = function(req,res){
+    Category.fetch(function(err, categories) {
+      if (err) {
+        console.log(err)
+      }
+      res.render('catetory_admin', {
+            title:'分类列表页',
+            category: categories
+      })
+    })
+  }
+  //更新分类
+exports.catetory_update = function(req,res){
+  Category.fetch(function(err, categories) {
+      if (err) {
+        console.log(err)
+      }
+      res.render('categorylist', {
+        title: '分类列表页',
+        categories: categories
+      })
+    })
+}

@@ -7,6 +7,7 @@ block content
           thead
             tr
               th 电影名字
+              th 电影类型
               th 导演
               th 国家
               th 上映年份
@@ -18,6 +19,7 @@ block content
             each item in movies
              tr(class="item-id-#{item_id}")
               td #{item.title}
+              td #{item.category.name}
               td #{item.doctor}
               td #{item.country}
               td #{item.year}

@@ -5,6 +5,7 @@ var mongoose = require('mongoose')
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser') 
 var session = require("express-session")
+var multipart = require('connect-multiparty')
 var looger = require("morgan")
 var mongoStore =require("connect-mongo")(session)
 var port = process.env.PORT || 3000
@@ -14,6 +15,7 @@ mongoose.connect(mongoUrl)
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser())
+app.use(multipart())
 app.set('views','./views/pages')   //视图的路径，即后面index,admin,list,detail的文件位置
 app.set('view engine','jade')   //模板引擎
 app.use(express.static(path.join(__dirname,'public')))  //静态文件的路径

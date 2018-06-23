@@ -23,7 +23,7 @@ exports.index = function(req, res) {
         categories: categories
       })
     })
- console.log("indexindex")
+ 
 }
 
 // search page
