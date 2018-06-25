@@ -48,51 +48,49 @@ exports.newmovies = function(req,res){
         if (req.poster) {
           movieObj.poster = req.poster
         }
-        if (id) {
-          Movie.findById(id, function(err, movie) {
+      if (id) {
+        Movie.findById(id, function(err, movie) {
+          if (err) {
+            console.log(err)
+          }
+          _movie = _.extend(movie, movieObj)
+          _movie.save(function(err, movie) {
             if (err) {
               console.log(err)
             }
-      
-            _movie = _.extend(movie, movieObj)
-            _movie.save(function(err, movie) {
-              if (err) {
+            res.redirect('/movie/' + movie._id)
+          })
+        })
+      }else{
+        console.log(movieObj)
+        _movie = new Movie(movieObj)
+        var categoryId = movieObj.category
+        var categoryName = movieObj.categoryName
+        _movie.save(function(err, movie) {
+          if (err) {
                 console.log(err)
-              }
-      
-                 res.redirect('/movie/' + movie._id)
-            })
-          })
-        }else{
-            console.log(movieObj)
-          _movie = new Movie(movieObj)
-          var categoryId = movieObj.category
-          var categoryName = movieObj.categoryName
-          _movie.save(function(err, movie) {
-            if (err) {
-                  console.log(err)
-            }
-            if (categoryId) {
-              Category.findById(categoryId, function(err, category) {
-                category.movies.push(movie._id)
-                category.save(function(err, category) {
-                     res.redirect('/movie/' + movie._id)
-                })
-              })
-            }else if (categoryName) {
-              var category = new Category({
-                name: categoryName,
-                movies: [movie._id]
-              })
+          }
+          if (categoryId) {
+            Category.findById(categoryId, function(err, category) {
+              category.movies.push(movie._id)
               category.save(function(err, category) {
-                movie.category = category._id
-                movie.save(function(err, movie) {
-                  res.redirect('/movie/' + movie._id)
-                })
+                   res.redirect('/movie/' + movie._id)
               })
-            }
-          })
-     }
+            })
+          }else if (categoryName) {
+            var category = new Category({
+              name: categoryName,
+              movies: [movie._id]
+            })
+            category.save(function(err, category) {
+              movie.category = category._id
+              movie.save(function(err, movie) {
+                res.redirect('/movie/' + movie._id)
+              })
+            })
+          }
+        })
+   }
 }
 exports.moviesList = function(req,res){
         Movie.find({})
@@ -101,7 +99,11 @@ exports.moviesList = function(req,res){
           if(err){
               console.log(err)
            }
-          res.render('list',{
+           console.log(movies)
+          if(movies.length == 0 ){
+              movies = {};
+          } 
+           res.render('list',{
               title:'列表页面',
               movies:movies
           })

@@ -12,7 +12,6 @@ module.exports = function(app) {
  app.use(function(req, res, next) {
     var _user = req.session.user
     app.locals.user = _user
-        console.log(_user)
     next()
   })
 // 首页
@@ -56,5 +55,8 @@ app.get("/results",Index.search)
 app.get('/admin/movie/catetory_admin',Userctr.loginRequired,Userctr.adminRequired, Catetory.catetory_admin)
 // 更新分类
 app.get("/admin/category/update/:id",Userctr.loginRequired,Userctr.adminRequired,Catetory.catetory_update)
+
+// 删除分类
+app.post("/admin/delcategory/:id",Userctr.loginRequired,Userctr.adminRequired,Catetory.delcategory)
 
 };
