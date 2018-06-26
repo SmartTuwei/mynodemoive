@@ -8,6 +8,11 @@ exports.Mdetail = function(req,res){
         if(err){
                 console.log(err)
         }
+        Movie.update({_id:id},{$inc:{pv:1}},function(err,){
+        if(err){
+                console.log(err)
+        } 
+        })
         Comment
         .find({movie:id})
         .populate("from","name")
